@@ -33,3 +33,48 @@ Ich habe gelernt, dass ein Cloud-Projekt nicht nur aus einem Server besteht. Wic
 ## Nächste Schritte
 
 Als Nächstes möchte ich die AWS EC2 Instanz fertig erstellen, die SSH Verbindung testen und danach Docker vorbereiten.
+
+
+
+
+
+# Arbeitsjournal 29.05.2026
+
+## Tagesziele
+
+Heute wollte ich die AWS Infrastruktur für mein Modul-300-Projekt weiter aufbauen. Das Ziel war, Terraform korrekt zu verwenden, eine EC2 Instanz zu erstellen und den Zugriff auf den Server vorzubereiten.
+
+## Was ich gemacht habe
+
+Ich habe heute an der Terraform Konfiguration gearbeitet. Dabei habe ich `main.tf` und `output.tf` angepasst. Ich habe die bestehende AWS Umgebung berücksichtigt und das vorhandene Key Pair `m300-key` verwendet. Ausserdem habe ich eine bestehende Security Group eingebunden.
+
+Danach habe ich Terraform ausgeführt und eine EC2 Instanz in der Region `us-east-1` erstellt. Anschliessend habe ich der Instanz eine Elastic IP zugewiesen, damit der Server eine feste öffentliche IP-Adresse hat.
+
+## Erreichte Resultate
+
+Am Ende des Tages war die EC2 Instanz erfolgreich erstellt. Die Elastic IP wurde ebenfalls zugewiesen. Damit ist die grundlegende AWS Infrastruktur für das Projekt vorhanden.
+
+## Probleme und Lösungen
+
+Ein Problem war, dass Terraform zuerst keine Berechtigung hatte, ein neues Key Pair zu importieren. Deshalb habe ich das bereits vorhandene Key Pair `m300-key` verwendet.
+
+Ein weiteres Problem war, dass die SSH Verbindung zur Instanz noch nicht funktioniert hat und ein Connection Timeout kam. Deshalb muss als Nächstes geprüft werden, ob Port 22 in der Security Group erlaubt ist, ob die richtige Elastic IP verwendet wird und ob die Instanz korrekt gestartet ist.
+
+## Eingesetzte Ressourcen
+
+* AWS Lab
+* EC2
+* Elastic IP
+* Terraform
+* Key Pair `m300-key`
+* Security Group
+* GitHub Repository
+
+## Was ich gelernt habe
+
+Ich habe gelernt, dass Terraform auch bestehende AWS Ressourcen verwenden kann, zum Beispiel ein vorhandenes Key Pair oder eine vorhandene Security Group. Ausserdem habe ich gesehen, dass eine EC2 Instanz nicht automatisch erreichbar ist. Dafür müssen IP-Adresse, Security Group und SSH Zugriff korrekt eingerichtet sein.
+
+## Nächste Schritte
+
+Als Nächstes möchte ich die SSH Verbindung zur EC2 Instanz testen. Danach installiere ich Docker und Docker Compose auf dem Server, damit später die Web-Applikation als Container laufen kann.
+

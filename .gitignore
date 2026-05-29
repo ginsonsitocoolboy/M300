@@ -3,7 +3,14 @@
 *.tfstate
 *.tfstate.*
 .terraform.lock.hcl
+crash.log
+crash.*.log
 
 # SSH Keys
 *.pem
 *.key
+
+# Windows / Editor
+.DS_Store
+Thumbs.db
+.vscode/
