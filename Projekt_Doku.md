@@ -24,3 +24,4 @@ GitHub Repository -> CI/CD Deployment -> AWS EC2 Instanz -> Docker Compose -> We
 Ursprünglich war GitLab CI/CD geplant. Da ich aktuell mit GitHub arbeite, wird das Repository auf GitHub geführt. Die Projektdateien, die Dokumentation, die Terraform-Dateien und später die Docker-Konfiguration werden dort versioniert.
 
 Anstelle einer rein manuellen AWS Einrichtung wird Terraform verwendet, damit die Cloud-Infrastruktur nachvollziehbar und wiederholbar erstellt werden kann. Dadurch passt das Projekt besser zu den V2-Zielen, weil neben AWS auch Infrastructure as Code eingesetzt wird.
+
