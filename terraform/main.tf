@@ -29,22 +29,22 @@ resource "tls_private_key" "m300_key" {
 }
 
 resource "local_sensitive_file" "private_key" {
-  filename        = "${path.module}/m300-key.pem"
+  filename        = "${path.module}/m300-key-terraform.pem"
   content         = tls_private_key.m300_key.private_key_pem
   file_permission = "0600"
 }
 
 resource "local_file" "public_key" {
-  filename = "${path.module}/m300-key.pub"
+  filename = "${path.module}/m300-key-terraform.pub"
   content  = tls_private_key.m300_key.public_key_openssh
 }
 
 resource "aws_key_pair" "m300_key" {
-  key_name   = "m300-key"
+  key_name   = "m300-key-terraform"
   public_key = tls_private_key.m300_key.public_key_openssh
 
   tags = {
-    Name    = "m300-key"
+    Name    = "m300-key-terraform"
     Project = "Modul300"
   }
 }

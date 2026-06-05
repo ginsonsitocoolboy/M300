@@ -78,3 +78,41 @@ Ich habe gelernt, dass Terraform auch bestehende AWS Ressourcen verwenden kann, 
 
 Als Nächstes möchte ich die SSH Verbindung zur EC2 Instanz testen. Danach installiere ich Docker und Docker Compose auf dem Server, damit später die Web-Applikation als Container laufen kann.
 
+
+# Arbeitsjournal 05.06.2026
+
+## Tagesziele
+
+Heute wollte ich die SSH Verbindung zur AWS EC2 Instanz herstellen und prüfen, ob ich mich korrekt mit dem Server verbinden kann.
+
+## Was ich gemacht habe
+
+Ich habe versucht, mich per SSH mit der EC2 Instanz zu verbinden. Dabei habe ich mit dem privaten Key gearbeitet und geprüft, ob der Key zur Instanz passt. Ausserdem habe ich kontrolliert, ob der richtige Benutzer, die richtige IP-Adresse und der richtige Key verwendet werden.
+
+## Erreichte Resultate
+
+Die Verbindung zur Instanz hat heute noch nicht richtig funktioniert. Ich konnte aber eingrenzen, dass das Problem sehr wahrscheinlich mit den SSH Keys zusammenhängt. Dadurch weiss ich jetzt genauer, worauf ich beim nächsten Mal achten muss.
+
+## Probleme und Lösungen
+
+Das Hauptproblem war, dass die SSH Verbindung nicht korrekt aufgebaut werden konnte. Es gab Probleme mit den Keys, weil der verwendete Key nicht richtig zur Instanz oder zum Key Pair gepasst hat. Dadurch wurde die Verbindung verweigert oder konnte nicht sauber hergestellt werden.
+
+Ich habe verstanden, dass bei AWS der private Key lokal vorhanden sein muss und genau zum Key Pair der EC2 Instanz passen muss. Das muss beim nächsten Mal sauber geprüft werden.
+
+## Eingesetzte Ressourcen
+
+- AWS Lab
+- EC2 Instanz
+- Elastic IP
+- SSH
+- SSH Key Pair
+- Terraform
+- GitHub Repository
+
+## Was ich gelernt habe
+
+Ich habe gelernt, dass der SSH Zugriff bei AWS stark von den richtigen Keys abhängt. Wenn der falsche private Key verwendet wird oder der Key nicht zur Instanz passt, funktioniert die Verbindung nicht. Ausserdem habe ich gelernt, dass man beim Erstellen der Instanz genau darauf achten muss, welches Key Pair ausgewählt wird.
+
+## Nächste Schritte
+
+Beim nächsten Mal werde ich die SSH Keys nochmals sauber prüfen und sicherstellen, dass der richtige private Key verwendet wird. Danach sollte ich sicher weiterkommen und die Verbindung zur EC2 Instanz herstellen können. Anschliessend kann ich Docker auf dem Server installieren und mit der Web-Applikation weitermachen.

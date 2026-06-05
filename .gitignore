@@ -9,6 +9,8 @@ crash.*.log
 # Terraform generated SSH keys
 terraform/m300-key.pem
 terraform/m300-key.pub
+terraform/m300-key-terraform.pem
+terraform/m300-key-terraform.pub
 
 # SSH Keys
 *.pem

@@ -10,12 +10,12 @@ output "instance_public_dns" {
 
 output "ssh_command_public_ip" {
   description = "SSH Befehl mit Public IP"
-  value       = "ssh -i ${abspath("${path.module}/m300-key.pem")} ubuntu@${aws_instance.m300_webapp.public_ip}"
+  value       = "ssh -i ${abspath("${path.module}/m300-key-terraform.pem")} ubuntu@${aws_instance.m300_webapp.public_ip}"
 }
 
 output "ssh_command_elastic_ip" {
   description = "SSH Befehl mit Elastic IP"
-  value       = "ssh -i ${abspath("${path.module}/m300-key.pem")} ubuntu@98.94.188.179"
+  value       = "ssh -i ${abspath("${path.module}/m300-key-terraform.pem")} ubuntu@98.94.188.179"
 }
 
 output "website_url_public_ip" {
