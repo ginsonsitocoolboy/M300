@@ -116,3 +116,50 @@ Ich habe gelernt, dass der SSH Zugriff bei AWS stark von den richtigen Keys abh�
 ## Nächste Schritte
 
 Beim nächsten Mal werde ich die SSH Keys nochmals sauber prüfen und sicherstellen, dass der richtige private Key verwendet wird. Danach sollte ich sicher weiterkommen und die Verbindung zur EC2 Instanz herstellen können. Anschliessend kann ich Docker auf dem Server installieren und mit der Web-Applikation weitermachen.
+
+
+
+# Arbeitsjournal 12.06.2026
+
+## Tagesziele
+
+Heute wollte ich die AWS EC2 Instanz sauber neu erstellen, die SSH Verbindung korrekt zum Laufen bringen und das GitHub Repository auf dem Server vorbereiten.
+
+## Was ich gemacht habe
+
+Ich habe heute zuerst die alte EC2 Instanz und die alten SSH Keys bereinigt, weil es vorher Probleme mit der Verbindung gab. Danach habe ich die Terraform Konfiguration angepasst, damit die Infrastruktur sauber neu erstellt werden kann.
+
+Anschliessend habe ich Terraform erneut ausgeführt und die EC2 Instanz auf AWS erstellt. Danach habe ich mich per SSH mit der Instanz verbunden. Nachdem die Verbindung funktioniert hat, habe ich das GitHub Repository auf die EC2 Instanz geklont.
+
+Dabei habe ich aus Versehen das Repository zweimal ineinander geklont. Ich habe den Fehler erkannt und den falschen Ordner wieder gelöscht.
+
+Danach habe ich auf der EC2 Instanz Docker vorbereitet beziehungsweise installiert, damit die Web-Applikation später mit Docker Compose laufen kann.
+
+## Erreichte Resultate
+
+Am Ende des Tages konnte ich die EC2 Instanz erfolgreich erstellen und mich per SSH verbinden. Das Repository ist jetzt auf dem Server vorhanden. Docker wurde ebenfalls vorbereitet. Damit ist die Grundlage für die Web-Applikation geschaffen.
+
+## Probleme und Lösungen
+
+Ein Problem war, dass alte Keys und alte Instanzdaten zu Verwirrung geführt haben. Deshalb habe ich die alten Ressourcen bereinigt und mit Terraform neu aufgebaut.
+
+Ein weiteres Problem war, dass ich das Repository versehentlich doppelt geklont habe. Dadurch entstand ein unnötiger Ordner im Projektordner. Ich habe den Fehler bemerkt und den falschen Ordner gelöscht.
+
+## Eingesetzte Ressourcen
+
+- AWS Lab
+- EC2 Instanz
+- Terraform
+- SSH
+- SSH Key Pair
+- GitHub Repository
+- PowerShell
+- Docker
+
+## Was ich gelernt habe
+
+Ich habe gelernt, dass SSH Keys und Terraform Ressourcen sauber zusammenpassen müssen, damit die Verbindung funktioniert. Ausserdem habe ich gelernt, wie wichtig es ist, im richtigen Ordner zu arbeiten, bevor man ein Repository klont.
+
+## Nächste Schritte
+
+Als Nächstes möchte ich prüfen, ob Docker und Docker Compose korrekt installiert sind. Danach kann ich die Web-Applikation mit Docker Compose starten und testen, ob sie über die Public IP der EC2 Instanz erreichbar ist.
