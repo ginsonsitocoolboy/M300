@@ -246,3 +246,55 @@ Ich habe gelernt, dass Terraform-Outputs nicht automatisch mit dem tatsächliche
 Als Nächstes möchte ich die Terraform-Konfiguration versionieren (Commit & Push), das Projekt um eine automatische CI/CD-Pipeline mit GitHub Actions erweitern und danach ein Monitoring (z. B. Uptime Kuma) für die Web-Applikation aufsetzen.
 
 
+
+Arbeitsjournal 03.07.2026
+
+Tagesziele
+
+Heute wollte ich eine automatische CI/CD-Pipeline mit GitHub Actions einrichten, damit Änderungen am Code automatisch auf die EC2-Instanz deployed werden. Ausserdem wollte ich ein Basis-Monitoring einrichten und die gesamte Pipeline end-to-end testen.
+
+Was ich gemacht habe
+
+Zuerst habe ich in den GitHub Repository Settings drei Secrets angelegt (SSH_PRIVATE_KEY, SERVER_HOST, SERVER_USER), damit GitHub Actions sich mit der EC2-Instanz verbinden kann, ohne dass sensible Daten im Code stehen. Danach habe ich im Repository einen Workflow (.github/workflows/deploy.yml) erstellt, der bei jedem Push auf den main-Branch automatisch per SSH auf den Server verbindet, das Repository aktualisiert (git pull) und die Web-Applikation mit Docker Compose neu baut und startet.
+
+Beim ersten Testlauf ist die Pipeline mit zwei Fehlern fehlgeschlagen: "ssh: no key found" und anschliessend ein "i/o timeout" beim Verbindungsversuch auf Port 22. Ich habe das GitHub Secret mit dem privaten SSH-Key neu über PowerShell (Get-Content) kopiert, da der Key beim vorherigen Kopieren über CMD offenbar nicht korrekt mit Zeilenumbrüchen übertragen wurde. Für das Timeout-Problem habe ich die Security Group der EC2-Instanz überprüft und festgestellt, dass Port 22 nur für meine eigene IP-Adresse freigegeben war. Da GitHub-Actions-Runner von wechselnden IP-Adressen aus verbinden, habe ich Port 22 für alle Adressen (0.0.0.0/0) freigegeben.
+
+Nach diesen beiden Korrekturen habe ich den Workflow erneut laufen lassen, worauf er erfolgreich durchlief. Zur end-to-end-Kontrolle habe ich anschliessend eine kleine sichtbare Änderung am Inhalt der Web-Applikation vorgenommen, committet und gepusht, um zu prüfen, ob die Pipeline die Änderung automatisch auf den Server bringt.
+
+Zusätzlich habe ich ein Basis-Monitoring eingerichtet: Auf dem Server habe ich mit docker ps und docker compose logs den Container-Status und die Logs überprüft. In der AWS Console habe ich zudem das automatische CloudWatch-Monitoring der EC2-Instanz (CPU- und Netzwerkauslastung) angeschaut.
+
+Erreichte Resultate
+
+Am Ende des Tages läuft eine vollständige CI/CD-Pipeline: Jeder Push auf main löst automatisch ein Deployment auf die EC2-Instanz aus, ohne dass ich mich manuell per SSH verbinden muss. Der End-to-End-Test mit der Teständerung war erfolgreich, die Web-Applikation wurde automatisch aktualisiert. Zusätzlich ist ein Basis-Monitoring über Docker-Logs und CloudWatch vorhanden.
+
+Probleme und Lösungen
+
+Ein Problem war die Fehlermeldung "ssh: no key found", weil das GitHub Secret mit dem privaten Key nicht korrekt formatiert war. Die Lösung war, den Key über PowerShell statt CMD auszulesen, damit die Zeilenumbrüche erhalten bleiben, und das Secret damit neu zu setzen.
+
+Ein zweites Problem war ein Verbindungstimeout auf Port 22, weil die Security Group SSH-Zugriff nur von meiner eigenen IP-Adresse aus erlaubte. GitHub-Actions-Runner haben aber wechselnde IP-Adressen, weshalb ich Port 22 für alle Adressen öffnen musste, damit die Pipeline sich verbinden kann.
+
+Eingesetzte Ressourcen
+
+
+GitHub Actions
+GitHub Secrets
+SSH Key Pair
+AWS EC2 Instanz
+AWS Security Group
+AWS CLI
+AWS CloudWatch
+Docker
+Docker Compose
+PowerShell
+
+
+Was ich gelernt habe
+
+Ich habe gelernt, wie man mit GitHub Actions eine einfache CI/CD-Pipeline aufbaut, die Deployments automatisiert, und wie sensible Daten wie SSH-Keys sicher über Secrets statt im Code verwaltet werden. Ausserdem habe ich gelernt, dass bei der Übertragung von privaten Keys die Wahl der Shell (CMD vs. PowerShell) einen Unterschied machen kann, weil Zeilenumbrüche unterschiedlich behandelt werden. Zudem habe ich verstanden, dass automatisierte Systeme wie GitHub-Actions-Runner nicht von einer festen IP-Adresse aus arbeiten, was bei der Konfiguration von Security Groups berücksichtigt werden muss.
+
+Nächste Schritte
+
+Als Nächstes möchte ich die Projektdokumentation vervollständigen (Architekturdiagramm, Testfälle, Entscheidungsgrundlagen, Fazit) und alle Screenshots der wichtigsten Arbeitsschritte für die Abgabe zusammenstellen.
+
+
+
