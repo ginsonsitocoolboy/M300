@@ -163,3 +163,86 @@ Ich habe gelernt, dass SSH Keys und Terraform Ressourcen sauber zusammenpassen m
 ## Nächste Schritte
 
 Als Nächstes möchte ich prüfen, ob Docker und Docker Compose korrekt installiert sind. Danach kann ich die Web-Applikation mit Docker Compose starten und testen, ob sie über die Public IP der EC2 Instanz erreichbar ist.
+
+
+# Arbeitsjournal 19.06.2026
+
+## Tagesziele
+
+Heute wollte ich auf einem neuen PC weiterarbeiten. Dafür musste ich die nötigen Werkzeuge neu einrichten, einen neuen SSH-Key erstellen und die Terraform-Konfiguration so anpassen, dass die EC2-Instanz mit dem neuen Key funktioniert.
+
+## Was ich gemacht habe
+
+Zuerst habe ich auf dem neuen PC einen neuen SSH-Key mit `ssh-keygen` erstellt. Dabei gab es zuerst ein Problem, weil `~` in der Windows CMD nicht als Pfad-Abkürzung erkannt wird. Ich habe stattdessen `%USERPROFILE%` verwendet, danach hat die Key-Erstellung funktioniert.
+
+Da Terraform und die AWS CLI auf dem neuen PC noch nicht installiert waren, habe ich beide nachinstalliert. Anschliessend habe ich die AWS-Zugangsdaten (Access Key, Secret Key, Session Token) aus dem Cloud-Lab in die `credentials`-Datei eingetragen. Auch hier gab es zuerst ein Problem, weil Notepad die Datei automatisch mit einer `.txt`-Endung gespeichert hat statt als reine `credentials`-Datei. Nach der Korrektur hat die Verbindung zu AWS funktioniert.
+
+In der Terraform-Konfiguration (`main.tf`) habe ich die alten, automatisch generierten Key-Ressourcen (`tls_private_key`, `local_file`, `local_sensitive_file`) entfernt und stattdessen ein neues `aws_key_pair` mit meinem neu erstellten Public Key definiert. Danach habe ich `terraform init` ausgeführt, um den AWS Provider neu zu laden, und mit `terraform apply` die EC2-Instanz mit dem neuen Key erstellt.
+
+## Erreichte Resultate
+
+Am Ende des Tages war die neue EC2-Instanz mit dem neuen Key erfolgreich über Terraform erstellt. Die grundlegende Umgebung (Terraform, AWS CLI, SSH-Key, Zugangsdaten) ist auf dem neuen PC vollständig eingerichtet.
+
+## Probleme und Lösungen
+
+Ein Problem war, dass `ssh-keygen` unter Windows CMD mit `~` nicht funktioniert hat. Die Lösung war, stattdessen `%USERPROFILE%` als Pfad zu verwenden. Ein weiteres Problem war, dass Notepad beim Speichern der `credentials`-Datei automatisch eine `.txt`-Endung anhängt, wenn man das nicht manuell auf "Alle Dateien" umstellt. Nach der Korrektur beider Punkte hat die Einrichtung funktioniert.
+
+## Eingesetzte Ressourcen
+
+- AWS Lab
+- Terraform
+- AWS CLI
+- SSH Key Pair
+- GitHub Repository
+- Windows CMD
+
+## Was ich gelernt habe
+
+Ich habe gelernt, wie man ein bestehendes Cloud-Projekt sauber auf einem neuen Rechner fortsetzt: neuer SSH-Key, saubere Trennung von Zugangsdaten und Code, und dass typische Windows-Stolpersteine wie `~`-Pfade oder automatische Dateiendungen die Einrichtung erschweren können, wenn man sie nicht kennt.
+
+## Nächste Schritte
+
+Als Nächstes möchte ich mich per SSH mit der neuen Instanz verbinden, Docker installieren und die Web-Applikation mit Docker Compose starten und testen.
+
+
+# Arbeitsjournal 26.06.2026
+
+## Tagesziele
+
+Heute wollte ich mich mit der neu erstellten EC2-Instanz verbinden, die Web-Applikation mit Docker Compose starten und testen, ob sie über die Public IP erreichbar ist.
+
+## Was ich gemacht habe
+
+Ich habe versucht, mich per SSH mit dem neuen Key zur Instanz zu verbinden, was zuerst mit "Permission denied (publickey)" fehlgeschlagen ist. Beim Vergleich meiner `main.tf` mit der `outputs.tf` habe ich festgestellt, dass die `outputs.tf` noch veraltete, hartcodierte Werte (eine alte Elastic IP und einen alten Key-Namen) aus einem früheren Projektstand enthielt, die mit der aktuellen Konfiguration nichts mehr zu tun hatten. Ich habe die `outputs.tf` bereinigt, sodass sie nur noch auf tatsächlich vorhandene Ressourcen verweist.
+
+Danach konnte ich mich erfolgreich mit der echten Public IP der Instanz verbinden. Auf dem Server habe ich Docker installiert, das GitHub Repository geklont und geprüft, ob der `app`-Ordner für das Dockerfile vorhanden ist. Anschliessend habe ich die Web-Applikation mit `docker compose up -d --build` gebaut und gestartet.
+
+Zum Schluss habe ich zuerst lokal auf dem Server mit `curl localhost:80` getestet, ob nginx antwortet, und danach die Erreichbarkeit über die Public IP im Browser geprüft.
+
+## Erreichte Resultate
+
+Am Ende des Tages läuft die Web-Applikation erfolgreich auf der neuen EC2-Instanz und ist über die Public IP im Browser erreichbar. Der neue SSH-Key funktioniert, die Terraform-Konfiguration ist bereinigt und aktuell, und Docker Compose startet die Applikation zuverlässig.
+
+## Probleme und Lösungen
+
+Das Hauptproblem war die "Permission denied (publickey)"-Fehlermeldung nach dem Neuaufbau der Instanz. Die Ursache war nicht der neue Key selbst, sondern eine veraltete `outputs.tf`, die mich mit falschen, hartcodierten IP-Adressen und Key-Namen aus einem alten Projektstand in die Irre geführt hat. Durch genaues Vergleichen von `main.tf` und `outputs.tf` konnte ich die Diskrepanz finden und die Outputs bereinigen.
+
+## Eingesetzte Ressourcen
+
+- AWS Lab
+- EC2 Instanz
+- Terraform
+- SSH Key Pair
+- GitHub Repository
+- Docker
+- Docker Compose
+
+## Was ich gelernt habe
+
+Ich habe gelernt, dass Terraform-Outputs nicht automatisch mit dem tatsächlichen Zustand der Ressourcen übereinstimmen müssen, wenn sie hartcodierte Werte statt Referenzen auf Ressourcen enthalten – das kann zu irreführenden Informationen führen. Ausserdem habe ich gelernt, dass man bei Fehlern wie "Permission denied" nicht nur den Key selbst, sondern auch die gesamte Konfiguration rund um die Instanz prüfen sollte.
+
+## Nächste Schritte
+
+Als Nächstes möchte ich die Terraform-Konfiguration versionieren (Commit & Push), das Projekt um eine automatische CI/CD-Pipeline mit GitHub Actions erweitern und danach ein Monitoring (z. B. Uptime Kuma) für die Web-Applikation aufsetzen.
+
+
