@@ -101,8 +101,7 @@ Die Web-Applikation ist über die Public IP der EC2-Instanz im Browser erreichba
 
 ### 7.2 Nachweis: CI/CD-Pipeline funktioniert
 
-![GitHub Actions Runs]
-(bilder/Action_github.png)
+![GitHub Actions Runs](bilder/Action_github.png)
 
 Zwei erfolgreiche Deployment-Durchläufe über GitHub Actions, ausgelöst automatisch durch `git push` auf den `main`-Branch. Jeder Durchlauf verbindet sich per SSH mit der EC2-Instanz, aktualisiert das Repository und startet die Docker-Container neu.
 
@@ -135,3 +134,4 @@ Am Ende des Projekts steht eine vollständig funktionierende, automatisierte Clo
 Während des Projekts traten mehrere praxisnahe Probleme auf – unter anderem SSH-Key-Konflikte nach dem Neuaufbau der Instanz, eine veraltete `outputs.tf` mit irreführenden Werten, fehlerhafte Secret-Formatierung in GitHub Actions sowie zu restriktive Security-Group-Regeln. Jedes dieser Probleme wurde systematisch analysiert und gelöst; die Details dazu sind im `Arbeitsjournal.md` dokumentiert.
 
 **Wichtigste Erkenntnis:** Cloud-Projekte bestehen nicht nur aus dem Aufsetzen eines Servers, sondern aus dem Zusammenspiel vieler Komponenten – Netzwerkkonfiguration, Zugriffsrechte, Versionierung, Automatisierung und Überwachung müssen sauber ineinandergreifen, damit ein System zuverlässig und wartbar funktioniert.
+  , 
