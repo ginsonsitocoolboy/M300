@@ -5,12 +5,11 @@ terraform {
       version = ">= 5.0"
     }
   }
-
   required_version = ">= 1.5.0"
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 resource "aws_key_pair" "m300_key_new" {
@@ -19,12 +18,10 @@ resource "aws_key_pair" "m300_key_new" {
 }
 
 resource "aws_instance" "m300_webapp" {
-  ami           = "ami-05cf1e9f73fbad2e2"
-  instance_type = "t2.micro"
-
-  key_name = aws_key_pair.m300_key_new.key_name
-
-  vpc_security_group_ids = ["sg-0f5f0eabbcc268057"]
+  ami                     = var.ami_id
+  instance_type           = var.instance_type
+  key_name                = aws_key_pair.m300_key_new.key_name
+  vpc_security_group_ids  = [var.security_group_id]
 
   tags = {
     Name    = "M300-WebApp-EC2"
