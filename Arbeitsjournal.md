@@ -296,5 +296,46 @@ Nächste Schritte
 
 Als Nächstes möchte ich die Projektdokumentation vervollständigen (Architekturdiagramm, Testfälle, Entscheidungsgrundlagen, Fazit) und alle Screenshots der wichtigsten Arbeitsschritte für die Abgabe zusammenstellen.
 
+# Arbeitsjournal 10.07.2026
+
+## Tagesziele
+
+Heute wollte ich die Projekt-Konfiguration weiter verbessern (zentrale Terraform-Variablen), ein zweites Monitoring-Tool mit aktiver Alarmierung einrichten und die gesamte Projektdokumentation fertigstellen.
+
+## Was ich gemacht habe
+
+Zuerst habe ich in der Terraform-Konfiguration eine `variables.tf` eingeführt und die bisher hartcodierten Werte (AMI-ID, Instance Type, Security-Group-ID) durch Variablen ersetzt. Nach `terraform plan` zeigte sich, dass ausschliesslich Output-Werte aktualisiert werden mussten (weil sich die Public IP der Instanz zwischenzeitlich geändert hatte), aber keine Ressourcen neu erstellt oder zerstört wurden. Mit `terraform apply` wurde der State entsprechend aktualisiert.
+
+Danach habe ich die `docker-compose.yml` um einen zweiten Service erweitert: **Uptime Kuma**, ein Monitoring-Tool, das als eigener Container über Docker Compose orchestriert wird. Dafür musste ich zusätzlich Port 3001 in der Security Group freigeben. Nach dem Push wurde der neue Container automatisch über die bestehende CI/CD-Pipeline ausgerollt.
+
+In Uptime Kuma habe ich einen Monitor für die Web-Applikation eingerichtet und eine **Discord-Webhook-Benachrichtigung** konfiguriert. Um die Alarmierung zu testen, habe ich den Container `m300-webapp` gezielt gestoppt und nach kurzer Zeit wieder gestartet. Beide Ereignisse (Down/Up) wurden korrekt als Discord-Nachricht zugestellt.
+
+Zum Abschluss habe ich die `Projekt_Doku.md` vervollständigt: ein detailliertes Netzwerkdiagramm mit Ports und Zuständigkeiten, ein Prozessdiagramm für den CI/CD-Ablauf, eine Begründung der Kosten-/Skalierbarkeitsentscheidungen, eine Einordnung der Testfälle als Integrationstests, ein Wartungskonzept sowie eine kurze Klarstellung zum (nicht vorhandenen) Rollenkonzept, da es sich um ein Einzelprojekt handelt.
+
+## Erreichte Resultate
+
+Am Ende des Tages ist die Terraform-Konfiguration sauber mit zentralen Variablen aufgebaut, ein zweiter Monitoring-Service läuft produktiv neben der Web-Applikation, und die Alarmierung bei Ausfällen funktioniert nachweislich über Discord. Die Projektdokumentation ist inhaltlich vollständig und deckt Architektur, Netzwerk, Tests, Monitoring, Sicherheit und Wartung ab.
+
+## Probleme und Lösungen
+
+Ein kleineres Problem war, dass `terraform plan` nach der Variablen-Einführung Änderungen anzeigte, die auf den ersten Blick beunruhigend wirkten. Nach genauerer Prüfung stellte sich heraus, dass diese ausschliesslich von einer zwischenzeitlich manuell geänderten Public IP stammten und keine echten Infrastruktur-Änderungen betrafen – wichtig war hier, den Plan-Output genau zu lesen, bevor man ihn anwendet.
+
+## Eingesetzte Ressourcen
+
+- Terraform (`variables.tf`)
+- Docker Compose (Multi-Service-Setup)
+- Uptime Kuma
+- Discord Webhook
+- AWS Security Group
+- GitHub Actions
+- AWS CloudWatch
+
+## Was ich gelernt habe
+
+Ich habe gelernt, wie man Terraform-Konfigurationen durch Variablen wartbarer macht, ohne die eigentliche Infrastruktur zu verändern. Ausserdem habe ich gesehen, wie viel Mehrwert aktive Alarmierung gegenüber reinem passivem Monitoring bringt: Ein Ausfall wird nicht erst bemerkt, wenn jemand zufällig die Seite aufruft, sondern sofort gemeldet. Zudem habe ich gelernt, dass es bei Multi-Container-Setups mit Docker Compose wichtig ist, für jeden zusätzlichen Service auch die Netzwerkfreigaben (Security Group) entsprechend zu erweitern.
+
+## Nächste Schritte
+
+Das Projekt ist funktional und dokumentarisch abgeschlossen. Als mögliche Erweiterung für die Zukunft käme eine Einschränkung der offenen SSH-Regel (z. B. auf GitHub-Actions-IP-Ranges) sowie ein automatisiertes Backup für die Uptime-Kuma-Konfiguration in Frage.
 
 
